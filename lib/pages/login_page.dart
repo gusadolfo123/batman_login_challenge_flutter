@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 
 const height_logo = 52.0;
@@ -23,7 +21,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
   Animation<double> animationTextPosition;
   Animation<double> animationOpacity;
 
-  Animation<double> animationScaleLogo;
+  Animation<double> animationScaleBatman;
 
   Animation<double> animationInputPosition;
   Animation<double> animationInputOpacity;
@@ -32,42 +30,38 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
   void initState() {
     _controller = new AnimationController(
       vsync: this,
-      duration: Duration(seconds: 3),
+      duration: Duration(seconds: 4),
     );
 
-    animationScaleLogo = Tween<double>(begin: 10.0, end: 1.0).animate(
+    animationScaleBatman = Tween<double>(begin: 4.0, end: 1.0).animate(
       CurvedAnimation(
         parent: _controller,
-        curve: Interval(0.0, 1.0, curve: Curves.easeIn),
+        curve: Interval(0.75, 1.0, curve: Curves.easeIn),
       ),
     );
 
     animationOpacity = Tween(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(
         parent: _controller,
-        curve: Interval(
-          0.7,
-          1.0,
-          curve: Curves.easeIn,
-        ),
+        curve: Interval(0.5, 0.75, curve: Curves.easeIn),
       ),
     );
 
-    animationScale = Tween<double>(begin: 40.0, end: 1.0).animate(
+    animationScale = Tween<double>(begin: 26.0, end: 1.0).animate(
       CurvedAnimation(
         parent: _controller,
-        curve: Interval(0.0, 0.3, curve: Curves.ease),
+        curve: Interval(0.0, 0.25, curve: Curves.ease),
       ),
     );
 
     animationPosition = Tween(begin: 0.0, end: 100.0).animate(
       CurvedAnimation(
         parent: _controller,
-        curve: Interval(0.6, 1.0, curve: Curves.easeOut),
+        curve: Interval(0.5, 0.75, curve: Curves.easeOut),
       ),
     );
 
-    _controller.forward();
+    _controller?.forward();
 
     super.initState();
   }
@@ -83,114 +77,121 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     final _size = MediaQuery.of(context).size;
 
-    return AnimatedBuilder(
-      animation: _controller,
-      builder: (context, child) {
-        return Scaffold(
-          backgroundColor: Colors.black,
-          body: Stack(
-            fit: StackFit.expand,
-            alignment: Alignment.center,
-            children: [
-              Positioned(
-                top: 0,
-                child: Image(
-                  width: _size.width,
-                  image: AssetImage("assets/batman_background.png"),
-                ),
-              ),
-              Positioned(
-                top: 0,
-                child: Transform.scale(
-                  scale: animationScaleLogo.value,
-                  child: Container(
-                    width: 500,
-                    height: 500,
-                    child: Image(
-                      image: AssetImage("assets/batman_alone.png"),
+    return Material(
+      child: InkWell(
+        onTap: () {
+          _controller.forward(from: 0.0);
+        },
+        child: AnimatedBuilder(
+          animation: _controller,
+          builder: (context, child) {
+            return Scaffold(
+              backgroundColor: Colors.black,
+              body: Stack(
+                fit: StackFit.expand,
+                alignment: Alignment.center,
+                children: [
+                  Positioned(
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    child: Image.asset(
+                      "assets/batman_background.png",
+                      width: _size.width,
                     ),
                   ),
-                ),
-              ),
-              Positioned(
-                top: (_size.height * 0.5) -
-                    (height_logo / 2) -
-                    animationPosition.value +
-                    position,
-                left: (_size.width * 0.5) - (width_logo / 2),
-                child: Transform.scale(
-                  scale: animationScale.value,
-                  child: Container(
-                    width: width_logo,
-                    height: height_logo,
-                    child: Image(
-                      image: AssetImage("assets/batman_logo.png"),
+                  Positioned(
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    child: Transform.scale(
+                      scale: animationScaleBatman.value,
+                      child: Image.asset(
+                        "assets/batman_alone.png",
+                        fit: BoxFit.contain,
+                      ),
                     ),
                   ),
-                ),
-              ),
-              Positioned(
-                top: (_size.height * 0.5) - (height_logo / 2) + 40,
-                child: Opacity(
-                  opacity: animationOpacity.value,
-                  child: Column(
-                    children: [
-                      Text(
-                        "WELCOME TO",
-                        style: TextStyle(color: Colors.white, fontSize: 20),
+                  Positioned(
+                    top: (_size.height * 0.5) -
+                        (height_logo / 2) -
+                        animationPosition.value +
+                        position,
+                    left: (_size.width * 0.5) - (width_logo / 2),
+                    child: Transform.scale(
+                      scale: animationScale.value,
+                      child: Image.asset(
+                        "assets/batman_logo.png",
+                        width: width_logo,
+                        height: height_logo,
                       ),
-                      Text(
-                        "GOTHAM CITY",
-                        style: TextStyle(color: Colors.white, fontSize: 40),
-                      ),
-                      Text(
-                        "phkaj sdjfh  fhksjdfhkjsdhwerj whejrkh asdad asd",
-                        style: TextStyle(color: Colors.grey[400], fontSize: 12),
-                      ),
-                      const SizedBox(height: 80),
-                      Column(
+                    ),
+                  ),
+                  Positioned(
+                    top: (_size.height * 0.5) - (height_logo / 2) + 40,
+                    child: Opacity(
+                      opacity: animationOpacity.value,
+                      child: Column(
                         children: [
-                          Container(
-                            height: 54,
-                            width: _size.width - 80,
-                            child: RaisedButton(
-                              color: Colors.orange[300],
-                              onPressed: () {},
-                              child: Text(
-                                "LOGIN",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 18,
-                                ),
-                              ),
-                            ),
+                          Text(
+                            "WELCOME TO",
+                            style: TextStyle(color: Colors.white, fontSize: 20),
                           ),
-                          Container(
-                            height: 54,
-                            margin: EdgeInsets.only(top: 20),
-                            width: _size.width - 80,
-                            child: RaisedButton(
-                              color: Colors.orange[300],
-                              onPressed: () {},
-                              child: Text(
-                                "SIGNUP",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 18,
+                          Text(
+                            "GOTHAM CITY",
+                            style: TextStyle(color: Colors.white, fontSize: 40),
+                          ),
+                          Text(
+                            "phkaj sdjfh  fhksjdfhkjsdhwerj whejrkh asdad asd",
+                            style: TextStyle(
+                                color: Colors.grey[400], fontSize: 12),
+                          ),
+                          const SizedBox(height: 80),
+                          Column(
+                            children: [
+                              Container(
+                                height: 54,
+                                width: _size.width - 80,
+                                child: RaisedButton(
+                                  color: Colors.orange[300],
+                                  onPressed: () {},
+                                  child: Text(
+                                    "LOGIN",
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18,
+                                    ),
+                                  ),
                                 ),
                               ),
-                            ),
+                              Container(
+                                height: 54,
+                                margin: EdgeInsets.only(top: 20),
+                                width: _size.width - 80,
+                                child: RaisedButton(
+                                  color: Colors.orange[300],
+                                  onPressed: () {},
+                                  child: Text(
+                                    "SIGNUP",
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
-                    ],
+                    ),
                   ),
-                ),
+                ],
               ),
-            ],
-          ),
-        );
-      },
+            );
+          },
+        ),
+      ),
     );
   }
 }
